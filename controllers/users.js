@@ -1,7 +1,4 @@
 const { StatusCodes } = require('http-status-codes');
-const BadRequestError = require('../errors/BadRequest');
-const NotFoundError = require('../errors/NotFound');
-const InternalServerError = require('../errors/InternalServer');
 const User = require('../models/users');
 
 module.exports.getUsers = (req, res, next) => {
@@ -20,11 +17,11 @@ module.exports.createUser = (req, res, next) => {
     .then((users) => res.status(StatusCodes.CREATED).send({ data: users }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new BadRequestError('Переданы некорректные данные при создании пользователя'));
-      } else {
-        next(new InternalServerError('Произошла внутренняя ошибка сервера'));
+        res
+          .status(StatusCodes.BAD_REQUEST)
+          .send({ message: 'Переданы некорректные данные при создании пользователя' });
       }
-      next(err);
+      return next(err);
     });
 };
 
@@ -33,18 +30,20 @@ module.exports.getUserById = (req, res, next) => {
   User.findById(userId)
     .then((user) => {
       if (user === null) {
-        throw new NotFoundError('Запрашиваемый пользователь не найден');
+        res
+          .status(StatusCodes.NOT_FOUND)
+          .send({ message: 'Запрашиваемый пользователь не найден' });
       } else {
         res.send(user);
       }
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        next(new BadRequestError('Передан некорректный формат id'));
-      } else {
-        next(new InternalServerError('Произошла внутренняя ошибка сервера'));
+        res
+          .status(StatusCodes.BAD_REQUEST)
+          .send({ message: 'Переданы некорректные данные при создании пользователя' });
       }
-      next(err);
+      return next(err);
     });
 };
 
@@ -56,18 +55,20 @@ module.exports.setNewProfileInfo = (req, res, next) => {
   )
     .then((user) => {
       if (user === null) {
-        throw new NotFoundError('Запрашиваемый пользователь не найден');
+        res
+          .status(StatusCodes.NOT_FOUND)
+          .send({ message: 'Запрашиваемый пользователь не найден' });
       } else {
         res.send(user);
       }
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new BadRequestError('Переданы некорректные данные при обновлении профиля'));
-      } else {
-        next(new InternalServerError('Произошла внутренняя ошибка сервера'));
+        res
+          .status(StatusCodes.BAD_REQUEST)
+          .send({ message: 'Переданы некорректные данные при обновлении профиля' });
       }
-      next(err);
+      return next(err);
     });
 };
 
@@ -79,17 +80,19 @@ module.exports.setNewAvatar = (req, res, next) => {
   )
     .then((user) => {
       if (user === null) {
-        throw new NotFoundError('Запрашиваемый пользователь не найден');
+        res
+          .status(StatusCodes.NOT_FOUND)
+          .send({ message: 'Запрашиваемый пользователь не найден' });
       } else {
         res.send(user);
       }
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new BadRequestError('Переданы некорректные данные при обновлении аватара'));
-      } else {
-        next(new InternalServerError('Произошла внутренняя ошибка сервера'));
+        res
+          .status(StatusCodes.BAD_REQUEST)
+          .send({ message: 'Переданы некорректные данные при обновлении аватара' });
       }
-      next(err);
+      return next(err);
     });
 };
