@@ -48,9 +48,10 @@ module.exports.getUserById = (req, res, next) => {
 };
 
 module.exports.setNewProfileInfo = (req, res, next) => {
+  const { name, about } = req.body;
   User.findByIdAndUpdate(
     req.user._id,
-    { name: req.params.name, about: req.params.about },
+    { name, about },
     { new: true, runValidators: true },
   )
     .then((user) => {
@@ -73,9 +74,10 @@ module.exports.setNewProfileInfo = (req, res, next) => {
 };
 
 module.exports.setNewAvatar = (req, res, next) => {
+  const { avatar } = req.body;
   User.findByIdAndUpdate(
     req.user._id,
-    { avatar: req.params.avatar },
+    { avatar },
     { new: true },
   )
     .then((user) => {
