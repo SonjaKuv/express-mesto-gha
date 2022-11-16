@@ -17,8 +17,7 @@ module.exports.createUser = (req, res, next) => {
     .then((users) => res.status(StatusCodes.CREATED).send({ data: users }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res
-          .status(StatusCodes.BAD_REQUEST)
+        res.status(StatusCodes.BAD_REQUEST)
           .send({ message: 'Переданы некорректные данные при создании пользователя' });
       }
       return next(err);
@@ -30,8 +29,7 @@ module.exports.getUserById = (req, res, next) => {
   User.findById(userId)
     .then((user) => {
       if (user === null) {
-        res
-          .status(StatusCodes.NOT_FOUND)
+        res.status(StatusCodes.NOT_FOUND)
           .send({ message: 'Запрашиваемый пользователь не найден' });
       } else {
         res.send(user);
@@ -39,8 +37,7 @@ module.exports.getUserById = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res
-          .status(StatusCodes.BAD_REQUEST)
+        res.status(StatusCodes.BAD_REQUEST)
           .send({ message: 'Переданы некорректные данные при создании пользователя' });
       }
       return next(err);
@@ -56,8 +53,7 @@ module.exports.setNewProfileInfo = (req, res, next) => {
   )
     .then((user) => {
       if (user === null) {
-        res
-          .status(StatusCodes.NOT_FOUND)
+        res.status(StatusCodes.NOT_FOUND)
           .send({ message: 'Запрашиваемый пользователь не найден' });
       } else {
         res.send(user);
@@ -65,8 +61,7 @@ module.exports.setNewProfileInfo = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res
-          .status(StatusCodes.BAD_REQUEST)
+        res.status(StatusCodes.BAD_REQUEST)
           .send({ message: 'Переданы некорректные данные при обновлении профиля' });
       }
       return next(err);
@@ -82,8 +77,7 @@ module.exports.setNewAvatar = (req, res, next) => {
   )
     .then((user) => {
       if (user === null) {
-        res
-          .status(StatusCodes.NOT_FOUND)
+        res.status(StatusCodes.NOT_FOUND)
           .send({ message: 'Запрашиваемый пользователь не найден' });
       } else {
         res.send(user);
@@ -91,8 +85,7 @@ module.exports.setNewAvatar = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res
-          .status(StatusCodes.BAD_REQUEST)
+        res.status(StatusCodes.BAD_REQUEST)
           .send({ message: 'Переданы некорректные данные при обновлении аватара' });
       }
       return next(err);

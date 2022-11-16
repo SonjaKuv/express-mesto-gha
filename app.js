@@ -1,3 +1,4 @@
+const { StatusCodes } = require('http-status-codes');
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -17,22 +18,21 @@ app.use((req, res, next) => {
   req.user = {
     _id: '63736c64848a71d88af760a9',
   };
-
   next();
 });
 app.use(routerUsers);
 app.use(routerCards);
-app.use((req, res, next) => {
-  next({ status: 400 });
+app.use((err, req, res, next) => {
+  next({ status: StatusCodes.NOT_FOUND });
 });
 
 app.use((req, res, next) => {
-  next({ status: 404 });
+  next({ status: StatusCodes.NOT_FOUND });
 });
 
 app.use((err, req, res, next) => {
   console.error(err);
-  res.status(err.status || 500).json();
+  res.status(err.status || StatusCodes.INTERNAL_SERVER_ERROR).json();
   next();
 });
 

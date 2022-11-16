@@ -18,8 +18,7 @@ module.exports.createCard = (req, res, next) => {
     .then((cards) => res.status(StatusCodes.CREATED).send({ data: cards }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res
-          .status(StatusCodes.BAD_REQUEST)
+        res.status(StatusCodes.BAD_REQUEST)
           .send({ message: 'Переданы некорректные данные при создании карточки' });
       }
       return next(err);
@@ -30,8 +29,7 @@ module.exports.deleteCard = (req, res, next) => {
   Card.findByIdAndRemove(req.params.id)
     .then((card) => {
       if (card === null) {
-        res
-          .status(StatusCodes.NOT_FOUND)
+        res.status(StatusCodes.NOT_FOUND)
           .send({ message: 'Карточка с указанным id не найдена' });
       }
       return card;
@@ -40,8 +38,7 @@ module.exports.deleteCard = (req, res, next) => {
     .then((data) => res.send(data))
     .catch((err) => {
       if (err.name === 'CastError') {
-        res
-          .status(StatusCodes.BAD_REQUEST)
+        res.status(StatusCodes.BAD_REQUEST)
           .send({ message: 'Передан некорректный формат id' });
       }
       return next(err);
@@ -55,8 +52,7 @@ module.exports.likeCard = (req, res, next) => Card.findByIdAndUpdate(
 )
   .then((card) => {
     if (card === null) {
-      res
-        .status(StatusCodes.NOT_FOUND)
+      res.status(StatusCodes.NOT_FOUND)
         .send({ message: 'Передан несуществующий id карточки' });
     } else {
       res.send({ data: card });
@@ -64,12 +60,10 @@ module.exports.likeCard = (req, res, next) => Card.findByIdAndUpdate(
   })
   .catch((err) => {
     if (err.name === 'CastError') {
-      res
-        .status(StatusCodes.BAD_REQUEST)
+      res.status(StatusCodes.BAD_REQUEST)
         .send({ message: 'Передан некорректный формат id' });
     } else if (err.name === 'ValidationError') {
-      res
-        .status(StatusCodes.BAD_REQUEST)
+      res.status(StatusCodes.BAD_REQUEST)
         .send({ message: 'Переданы некорректные данные для лайка' });
     }
     return next(err);
@@ -82,8 +76,7 @@ module.exports.dislikeCard = (req, res, next) => Card.findByIdAndUpdate(
 )
   .then((card) => {
     if (card === null) {
-      res
-        .status(StatusCodes.NOT_FOUND)
+      res.status(StatusCodes.NOT_FOUND)
         .send({ message: 'Передан несуществующий id карточки' });
     } else {
       res.send(card);
@@ -91,12 +84,10 @@ module.exports.dislikeCard = (req, res, next) => Card.findByIdAndUpdate(
   })
   .catch((err) => {
     if (err.name === 'CastError') {
-      res
-        .status(StatusCodes.BAD_REQUEST)
+      res.status(StatusCodes.BAD_REQUEST)
         .send({ message: 'Передан некорректный формат id' });
     } else if (err.name === 'ValidationError') {
-      res
-        .status(StatusCodes.BAD_REQUEST)
+      res.status(StatusCodes.BAD_REQUEST)
         .send({ message: 'Переданы некорректные данные для удаления лайка' });
     }
     return next(err);
