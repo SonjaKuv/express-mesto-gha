@@ -16,8 +16,9 @@ module.exports.createUser = (req, res) => {
       if (err.name === 'ValidationError') {
         res.status(StatusCodes.BAD_REQUEST)
           .send({ message: 'Переданы некорректные данные при создании пользователя' });
+      } else {
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: 'Внутренняя ошибка сервера' });
       }
-      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: 'Внутренняя ошибка сервера' });
     });
 };
 
@@ -33,7 +34,7 @@ module.exports.getUserById = (req, res) => {
       }
     })
     .catch((err) => {
-      res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: 'Внутренняя ошибка сервера', err });
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: 'Внутренняя ошибка сервера' }, err);
     });
 };
 
@@ -56,8 +57,9 @@ module.exports.setNewProfileInfo = (req, res) => {
       if (err.name === 'ValidationError') {
         res.status(StatusCodes.BAD_REQUEST)
           .send({ message: 'Переданы некорректные данные при обновлении профиля' });
+      } else {
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: 'Внутренняя ошибка сервера' });
       }
-      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: 'Внутренняя ошибка сервера' });
     });
 };
 
@@ -80,7 +82,8 @@ module.exports.setNewAvatar = (req, res) => {
       if (err.name === 'ValidationError') {
         res.status(StatusCodes.BAD_REQUEST)
           .send({ message: 'Переданы некорректные данные при обновлении аватара' });
+      } else {
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: 'Внутренняя ошибка сервера' });
       }
-      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: 'Внутренняя ошибка сервера' });
     });
 };
