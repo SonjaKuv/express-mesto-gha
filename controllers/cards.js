@@ -26,22 +26,21 @@ module.exports.createCard = (req, res, next) => {
 };
 
 module.exports.deleteCard = (req, res, next) => {
-  Card.findByIdAndRemove(req.params.id)
+  const { cardId } = req.params;
+  Card.findById(cardId)
+    .orFail(() => res.status(StatusCodes.NOT_FOUND).send({ message: 'Карточка с указанным id не найдена' }))
     .then((card) => {
-      if (card === null) {
-        res.status(StatusCodes.NOT_FOUND)
-          .send({ message: 'Карточка с указанным id не найдена' });
-      }
-      return card;
+      Card.findByIdAndRemove(cardId)
+        .then(() => res.send(card))
+        .catch(next);
     })
-    .then((card) => card.delete())
-    .then((data) => res.send(data))
     .catch((err) => {
       if (err.name === 'CastError') {
         res.status(StatusCodes.BAD_REQUEST)
           .send({ message: 'Передан некорректный формат id' });
+      } else {
+        next(err);
       }
-      return next(err);
     });
 };
 
