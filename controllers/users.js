@@ -25,16 +25,14 @@ module.exports.createUser = (req, res) => {
 module.exports.getUserById = (req, res) => {
   const { userId } = req.params;
   User.findById(userId)
-    .then((user) => {
-      if (user === null) {
+    .then((user) => res.status(StatusCodes.OK).send({ data: user }))
+    .catch((err) => {
+      if (err.name === 'CastError') {
         res.status(StatusCodes.NOT_FOUND)
           .send({ message: 'Пользователь по указанному _id не найден' });
       } else {
-        res.send(user);
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: 'Внутренняя ошибка сервера' });
       }
-    })
-    .catch((err) => {
-      res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: 'Внутренняя ошибка сервера' }, err);
     });
 };
 
