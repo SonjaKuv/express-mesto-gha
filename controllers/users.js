@@ -1,10 +1,11 @@
 const { StatusCodes } = require('http-status-codes');
+const logger = require('../logger');
 const User = require('../models/users');
 
 module.exports.getUsers = (req, res) => {
   User.find({})
     .then((users) => res.status(StatusCodes.OK).send({ data: users }))
-    .catch((err) => res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: 'Внутренняя ошибка сервера', err }));
+    .catch((err) => logger.info(err));
 };
 
 module.exports.createUser = (req, res) => {
@@ -17,7 +18,7 @@ module.exports.createUser = (req, res) => {
         res.status(StatusCodes.BAD_REQUEST)
           .send({ message: 'Переданы некорректные данные при создании пользователя' });
       } else {
-        res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: 'Внутренняя ошибка сервера' });
+        logger.info(err);
       }
     });
 };
@@ -38,7 +39,7 @@ module.exports.getUserById = (req, res) => {
         res.status(StatusCodes.BAD_REQUEST)
           .send({ message: 'Переданы некорректные данные' });
       } else {
-        res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: 'Внутренняя ошибка сервера' });
+        logger.info(err);
       }
     });
 };
@@ -63,7 +64,7 @@ module.exports.setNewProfileInfo = (req, res) => {
         res.status(StatusCodes.BAD_REQUEST)
           .send({ message: 'Переданы некорректные данные при обновлении профиля' });
       } else {
-        res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: 'Внутренняя ошибка сервера' });
+        logger.info(err);
       }
     });
 };
@@ -73,7 +74,7 @@ module.exports.setNewAvatar = (req, res) => {
   User.findByIdAndUpdate(
     req.user._id,
     { avatar },
-    { new: true },
+    { new: true, runValidators: true },
   )
     .then((user) => {
       if (user === null) {
@@ -88,7 +89,7 @@ module.exports.setNewAvatar = (req, res) => {
         res.status(StatusCodes.BAD_REQUEST)
           .send({ message: 'Переданы некорректные данные при обновлении аватара' });
       } else {
-        res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: 'Внутренняя ошибка сервера' });
+        logger.info(err);
       }
     });
 };
