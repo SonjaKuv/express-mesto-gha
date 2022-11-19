@@ -4,8 +4,12 @@ const Card = require('../models/cards');
 
 module.exports.getCards = (req, res) => {
   Card.find({})
+    .populate(['owner', 'likes'])
     .then((cards) => res.status(StatusCodes.OK).send({ data: cards }))
-    .catch((err) => logger.info(err));
+    .catch((err) => {
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: 'На сервере произошла ошибка' });
+      logger.error(err);
+    });
 };
 
 module.exports.createCard = (req, res) => {
@@ -19,7 +23,8 @@ module.exports.createCard = (req, res) => {
         res.status(StatusCodes.BAD_REQUEST)
           .send({ message: 'Переданы некорректные данные при создании карточки' });
       } else {
-        logger.info(err);
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: 'На сервере произошла ошибка' });
+        logger.error(err);
       }
     });
 };
@@ -40,7 +45,8 @@ module.exports.deleteCard = (req, res) => {
         res.status(StatusCodes.BAD_REQUEST)
           .send({ message: 'Переданы некорректные данные' });
       } else {
-        logger.info(err);
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: 'На сервере произошла ошибка' });
+        logger.error(err);
       }
     });
 };
@@ -63,7 +69,8 @@ module.exports.likeCard = (req, res) => Card.findByIdAndUpdate(
       res.status(StatusCodes.BAD_REQUEST)
         .send({ message: 'Переданы некорректные данные для постановки лайка' });
     } else {
-      logger.info(err);
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: 'На сервере произошла ошибка' });
+      logger.error(err);
     }
   });
 
@@ -85,6 +92,7 @@ module.exports.dislikeCard = (req, res) => Card.findByIdAndUpdate(
       res.status(StatusCodes.BAD_REQUEST)
         .send({ message: 'Переданы некорректные данные для снятии лайка' });
     } else {
-      logger.info(err);
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: 'На сервере произошла ошибка' });
+      logger.error(err);
     }
   });

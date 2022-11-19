@@ -5,7 +5,10 @@ const User = require('../models/users');
 module.exports.getUsers = (req, res) => {
   User.find({})
     .then((users) => res.status(StatusCodes.OK).send({ data: users }))
-    .catch((err) => logger.info(err));
+    .catch((err) => {
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: 'На сервере произошла ошибка' });
+      logger.error(err);
+    });
 };
 
 module.exports.createUser = (req, res) => {
@@ -18,7 +21,8 @@ module.exports.createUser = (req, res) => {
         res.status(StatusCodes.BAD_REQUEST)
           .send({ message: 'Переданы некорректные данные при создании пользователя' });
       } else {
-        logger.info(err);
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: 'На сервере произошла ошибка' });
+        logger.error(err);
       }
     });
 };
@@ -39,7 +43,8 @@ module.exports.getUserById = (req, res) => {
         res.status(StatusCodes.BAD_REQUEST)
           .send({ message: 'Переданы некорректные данные' });
       } else {
-        logger.info(err);
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: 'На сервере произошла ошибка' });
+        logger.error(err);
       }
     });
 };
@@ -64,7 +69,8 @@ module.exports.setNewProfileInfo = (req, res) => {
         res.status(StatusCodes.BAD_REQUEST)
           .send({ message: 'Переданы некорректные данные при обновлении профиля' });
       } else {
-        logger.info(err);
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: 'На сервере произошла ошибка' });
+        logger.error(err);
       }
     });
 };
@@ -89,7 +95,8 @@ module.exports.setNewAvatar = (req, res) => {
         res.status(StatusCodes.BAD_REQUEST)
           .send({ message: 'Переданы некорректные данные при обновлении аватара' });
       } else {
-        logger.info(err);
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: 'На сервере произошла ошибка' });
+        logger.error(err);
       }
     });
 };
