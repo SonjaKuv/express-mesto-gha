@@ -15,7 +15,9 @@ module.exports.createUser = (req, res) => {
   const { name, about, avatar } = req.body;
 
   User.create({ name, about, avatar })
-    .then((users) => res.status(StatusCodes.CREATED).send({ data: users }))
+    .then((users) => {
+      res.status(StatusCodes.CREATED).send({ data: users });
+    })
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(StatusCodes.BAD_REQUEST)
@@ -61,11 +63,11 @@ module.exports.setNewProfileInfo = (req, res) => {
         res.status(StatusCodes.NOT_FOUND)
           .send({ message: 'Пользователь с указанным _id не найден' });
       } else {
-        res.send(user);
+        res.send({ data: user });
       }
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
+      if (err.name === 'ValidationError' || err.name === 'CastError') {
         res.status(StatusCodes.BAD_REQUEST)
           .send({ message: 'Переданы некорректные данные при обновлении профиля' });
       } else {
@@ -91,7 +93,7 @@ module.exports.setNewAvatar = (req, res) => {
       }
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
+      if (err.name === 'ValidationError' || err.name === 'CastError') {
         res.status(StatusCodes.BAD_REQUEST)
           .send({ message: 'Переданы некорректные данные при обновлении аватара' });
       } else {
