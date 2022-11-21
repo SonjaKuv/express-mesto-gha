@@ -36,6 +36,8 @@ module.exports.deleteCard = (req, res) => {
       if (card === null) {
         res.status(StatusCodes.NOT_FOUND)
           .send({ message: 'Удаление карточки с несуществующим в БД id' });
+      } else if (card.owner !== req.user._id) {
+        res.status(StatusCodes.FORBIDDEN).send({ message: 'Удаление чужой карточки запрещено' });
       } else {
         res.send({ data: card });
       }

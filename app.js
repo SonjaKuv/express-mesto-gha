@@ -4,18 +4,15 @@ const bodyParser = require('body-parser');
 const routerUsers = require('./routes/users');
 const routerCards = require('./routes/cards');
 const wrongPath = require('./routes/wrongPath');
+const { createUser, login } = require('./controllers/users');
 
 const { PORT = 3000 } = process.env;
 const app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use((req, res, next) => {
-  req.user = {
-    _id: '6373b6f424e07f612cdea178',
-  };
-  next();
-});
+app.post('/signin', login);
+app.post('/signup', createUser);
 app.use(routerUsers);
 app.use(routerCards);
 app.use(wrongPath);
