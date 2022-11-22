@@ -28,9 +28,6 @@ app.post('/signup', celebrate({
     email: Joi.string().required().email(),
     password: Joi.string().pattern(/^[a-zA-Z0-9]{3,30}$/).required().min(8),
 }),
-[Segments.QUERY]: {
-  token: Joi.string().token().required(),
-},
  }), createUser);
 app.use(routerUsers);
 app.use(routerCards);
