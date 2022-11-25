@@ -16,7 +16,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.post('/signin', celebrate({
   [Segments.BODY]: Joi.object().keys({
     email: Joi.string().required().email(),
-    password: Joi.string().pattern(/^[a-zA-Z0-9]{3,30}$/).required().min(8),
+    password: Joi.string().pattern(/\w{8,30}/).required().min(8),
 }),
  }), login);
 app.post('/signup', celebrate({
@@ -25,7 +25,7 @@ app.post('/signup', celebrate({
     about: Joi.string().min(2).max(30),
     avatar: Joi.string().pattern(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()\-._~:\/?#[\]@!\$&'\(\)\*\+,;=]*#?)/),
     email: Joi.string().required().email(),
-    password: Joi.string().pattern(/^[a-zA-Z0-9]{3,30}$/).required().min(8),
+    password: Joi.string().pattern(/\w{8,30}/).required().min(8),
 }),
  }), createUser);
 app.use(routerUsers);
