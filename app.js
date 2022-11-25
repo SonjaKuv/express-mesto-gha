@@ -1,8 +1,11 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
-const cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const { celebrate, Joi, Segments, errors } = require('celebrate');
+const {
+  celebrate, Joi, Segments, errors,
+} = require('celebrate');
 const routerUsers = require('./routes/users');
 const routerCards = require('./routes/cards');
 const wrongPath = require('./routes/wrongPath');
@@ -17,17 +20,17 @@ app.post('/signin', celebrate({
   [Segments.BODY]: Joi.object().keys({
     email: Joi.string().required().email(),
     password: Joi.string().pattern(/\w{8,30}/).required().min(8),
-}),
- }), login);
+  }),
+}), login);
 app.post('/signup', celebrate({
   [Segments.BODY]: Joi.object().keys({
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
-    avatar: Joi.string().pattern(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()\-._~:\/?#[\]@!\$&'\(\)\*\+,;=]*#?)/),
+    avatar: Joi.string().pattern(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()\-._~:/?#[\]@!$&'()*+,;=]*#?)/),
     email: Joi.string().required().email(),
     password: Joi.string().pattern(/\w{8,30}/).required().min(8),
-}),
- }), createUser);
+  }),
+}), createUser);
 app.use(routerUsers);
 app.use(routerCards);
 app.use(wrongPath);

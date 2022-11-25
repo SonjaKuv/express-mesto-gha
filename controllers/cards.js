@@ -8,9 +8,7 @@ module.exports.getCards = (req, res, next) => {
   Card.find({})
     .populate(['owner', 'likes'])
     .then((cards) => res.status(StatusCodes.OK).send({ data: cards }))
-    .catch((err) => {
-      next(err);
-    });
+    .catch(next);
 };
 
 module.exports.createCard = (req, res, next) => {
@@ -20,7 +18,7 @@ module.exports.createCard = (req, res, next) => {
     .then((cards) => res.status(StatusCodes.CREATED).send({ data: cards }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        throw new BadRequestError('Переданы некорректные данные при создании карточки');
+        next(new BadRequestError('Переданы некорректные данные при создании карточки'));
       } else {
         next(err);
       }
@@ -33,7 +31,7 @@ module.exports.deleteCard = (req, res, next) => {
     .then((card) => {
       if (card === null) {
         throw new NotFoundError('Удаление карточки с несуществующим в БД id');
-      } else if (card.owner != req.user._id) {
+      } else if (card.owner.toString() !== req.user._id) {
         throw new ForbiddenError('Удаление чужой карточки запрещено');
       } else {
         res.send({ data: card });
@@ -41,7 +39,7 @@ module.exports.deleteCard = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        throw new BadRequestError('Переданы некорректные данные');
+        next(new BadRequestError('Переданы некорректные данные'));
       } else {
         next(err);
       }
@@ -62,7 +60,7 @@ module.exports.likeCard = (req, res, next) => Card.findByIdAndUpdate(
   })
   .catch((err) => {
     if (err.name === 'CastError') {
-      throw new BadRequestError('Переданы некорректные данные для постановки лайка');
+      next(new BadRequestError('Переданы некорректные данные для постановки лайка'));
     } else {
       next(err);
     }
@@ -82,7 +80,7 @@ module.exports.dislikeCard = (req, res, next) => Card.findByIdAndUpdate(
   })
   .catch((err) => {
     if (err.name === 'CastError') {
-      throw new BadRequestError('Переданы некорректные данные для снятии лайка');
+      next(new BadRequestError('Переданы некорректные данные для снятии лайка'));
     } else {
       next(err);
     }

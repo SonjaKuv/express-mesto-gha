@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema({
     validate: {
       validator: (link) => isUrl(link),
       message: 'Неправильный формат ссылки на аватар',
-    }
+    },
   },
   email: {
     type: String,
@@ -40,7 +40,6 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
-    minlength: 8,
     select: false,
   },
 });
