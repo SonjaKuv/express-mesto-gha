@@ -16,19 +16,23 @@ module.exports.getUsers = (req, res, next) => {
 
 module.exports.createUser = (req, res, next) => {
   const {
-    name, about, avatar, email,
+    name, about, avatar, email, password
   } = req.body;
 
-  User.findOne({ email })
-    .then(() => {
-      bcrypt.hash(req.body.password, 10);
-    })
+    return bcrypt.hash(password, 10)
     .then((hash) => User.create({
       name, about, avatar, email, password: hash,
     })
-      .then((user) => res.status(StatusCodes.CREATED).send({ data: user })))
+      .then((user) => res.status(StatusCodes.CREATED).send({
+        name: user.name,
+        about: user.about,
+        avatar: user.avatar,
+        email: user.email,
+        _id: user._id,
+       })))
     .catch((err) => {
       if (err.name === 'ValidationError') {
+        console.log(err);
         throw new BadRequestError('Переданы некорректные данные при создании пользователя');
       } else if (err.code === 11000) {
         throw new ConflictError('Пользователь с таким email уже зарегистрирован');

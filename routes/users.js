@@ -17,8 +17,7 @@ router.get('/users/me', auth, getUserInfo);
 
 router.patch('/users/me', celebrate({
   [Segments.BODY]: Joi.object().keys({
-    name: Joi.string().min(2).max(30)
-      .required(),
+    name: Joi.string().min(2).max(30).required(),
     about: Joi.string().required().min(2).max(30),
   }),
 }), auth, setNewProfileInfo);
