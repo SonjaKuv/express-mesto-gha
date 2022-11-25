@@ -1,16 +1,17 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const { StatusCodes } = require('http-status-codes');
+const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser');
 const { celebrate, Joi, Segments, errors } = require('celebrate');
 const routerUsers = require('./routes/users');
 const routerCards = require('./routes/cards');
 const wrongPath = require('./routes/wrongPath');
 const { createUser, login } = require('./controllers/users');
-const handleError = require('./middlewares/handleError');
 
 const { PORT = 3000 } = process.env;
 const app = express();
-
+app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.post('/signin', celebrate({
@@ -33,9 +34,9 @@ app.use(routerCards);
 app.use(wrongPath);
 app.use(errors());
 app.use((err, req, res, next) => {
-  const { statusCode = 500, message } = err;
-  res.status(statusCode).send({
-    message: statusCode === 500 ? 'На сервере произошла ошибка' : message,
+  const { statusCode = StatusCodes.INTERNAL_SERVER_ERROR, message } = err;
+  res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
+    message: statusCode === StatusCodes.INTERNAL_SERVER_ERROR ? 'На сервере произошла ошибка' : message,
   });
   next();
 });

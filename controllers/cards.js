@@ -16,7 +16,6 @@ module.exports.getCards = (req, res, next) => {
 module.exports.createCard = (req, res, next) => {
   const { name, link } = req.body;
   const owner = req.user._id;
-
   Card.create({ name, link, owner })
     .then((cards) => res.status(StatusCodes.CREATED).send({ data: cards }))
     .catch((err) => {
@@ -34,7 +33,7 @@ module.exports.deleteCard = (req, res, next) => {
     .then((card) => {
       if (card === null) {
         throw new NotFoundError('Удаление карточки с несуществующим в БД id');
-      } else if (card.owner !== req.user._id) {
+      } else if (card.owner != req.user._id) {
         throw new ForbiddenError('Удаление чужой карточки запрещено');
       } else {
         res.send({ data: card });

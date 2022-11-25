@@ -7,12 +7,6 @@ const auth = require('../middlewares/auth');
 
 router.get('/users', auth, getUsers);
 
-router.get('/users/:userId', celebrate({
-  [Segments.PARAMS]: Joi.object().keys({
-    userId: Joi.string().length(24).hex().required(),
-  }),
-}), auth, getUserById);
-
 router.get('/users/me', auth, getUserInfo);
 
 router.patch('/users/me', celebrate({
@@ -21,6 +15,12 @@ router.patch('/users/me', celebrate({
     about: Joi.string().required().min(2).max(30),
   }),
 }), auth, setNewProfileInfo);
+
+router.get('/users/:userId', celebrate({
+  [Segments.PARAMS]: Joi.object().keys({
+    userId: Joi.string().length(24).hex().required(),
+  }),
+}), auth, getUserById);
 
 router.patch('/users/me/avatar', celebrate({
   [Segments.BODY]: Joi.object().keys({
