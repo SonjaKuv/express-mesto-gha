@@ -1,6 +1,5 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const { StatusCodes } = require('http-status-codes');
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser');
 const { celebrate, Joi, Segments, errors } = require('celebrate');
