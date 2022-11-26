@@ -4,6 +4,7 @@ const {
   getUsers, getUserById, setNewProfileInfo, setNewAvatar, getUserInfo,
 } = require('../controllers/users');
 const auth = require('../middlewares/auth');
+const linkRegExp = require('../utils/constants');
 
 router.use(auth);
 
@@ -26,7 +27,7 @@ router.get('/users/:userId', celebrate({
 
 router.patch('/users/me/avatar', celebrate({
   [Segments.BODY]: Joi.object().keys({
-    avatar: Joi.string().required().pattern(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()\-._~:/?#[\]@!$&'()*+,;=]*#?)/),
+    avatar: Joi.string().required().pattern(linkRegExp),
   }),
 }), setNewAvatar);
 

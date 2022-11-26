@@ -6,9 +6,9 @@ const {
 } = require('../controllers/cards');
 const linkRegExp = require('../utils/constants');
 
-router.get('/cards', getCards);
-
 router.use(auth);
+
+router.get('/cards', getCards);
 
 router.post('/cards', celebrate({
   [Segments.BODY]: Joi.object().keys({
