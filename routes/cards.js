@@ -4,6 +4,7 @@ const auth = require('../middlewares/auth');
 const {
   getCards, createCard, deleteCard, likeCard, dislikeCard,
 } = require('../controllers/cards');
+const linkRegExp = require('../utils/constants');
 
 router.get('/cards', getCards);
 
@@ -12,7 +13,7 @@ router.use(auth);
 router.post('/cards', celebrate({
   [Segments.BODY]: Joi.object().keys({
     name: Joi.string().min(2).max(30).required(),
-    link: Joi.string().required().pattern(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_~#?&=]*)/),
+    link: Joi.string().required().pattern(linkRegExp),
   }),
 }), createCard);
 
